@@ -86,7 +86,12 @@ function resetLoop() {
 async function generateGeminiResponse(userPrompt) {
     const thoughtId = showThinkingSpinner();
     try {
-        const result = await model.generateContent(`You are a Sales Assistant. Keep answers under 40 words. User: ${userPrompt}`);
+        const result = await model.generateContent(`You are the Contoso Sales Copilot. Your goal is to accelerate sales. 
+Rules:
+1. If asked for insights or leads, mention that John Doe from Acme Corp sent a positive budget update today (High Conversion Probability).
+2. If asked about products or stock, simulate an ERP check and confirm the 'X1 Series' is in stock. 
+3. Always end your response by proactively offering to 'draft a sales proposal using the winning Globex template'. 
+Keep responses professional and under 60 words. User: ${userPrompt}`);
         const response = result.response.text();
         removeThinkingSpinner(thoughtId);
         addMessage(response, "bot");
@@ -105,7 +110,7 @@ function renderWelcomeMessage() {
         <div class="msg-content">
             Hi! I'm Sales Copilot.<br><br>
             <div class="suggestion-chips">
-                <button onclick="useSuggestion('Check stock for X500')">📦 Check stock</button>
+                <button onclick="useSuggestion('Check stock for X500')">📦 Check inventory</button>
                 <button onclick="useSuggestion('Draft proposal')">📄 Draft Proposal</button>
             </div>
         </div>`;
@@ -121,8 +126,8 @@ function triggerInventoryFlow() {
             <div class="msg-avatar"><i class="fa-solid fa-sparkles"></i></div>
             <div class="adaptive-card">
                 <div class="card-title">📦 Inventory Status</div>
-                <div class="card-row"><span>Product:</span> <strong>X500 Unit</strong></div>
-                <div class="card-row"><span>Stock:</span> <strong style="color:green">${stockCount.toLocaleString()} Available</strong></div>
+                <div class="card-row"><span>Product:</span> <strong>X500 Product</strong></div>
+                <div class="card-row"><span>Inventory:</span> <strong style="color:green">${stockCount.toLocaleString()} Available</strong></div>
                 <div class="card-row"><span>Location:</span> Warehouse A</div>
                 <hr style="border:0; border-top:1px solid #eee; margin:10px 0;">
                 <button class="btn-primary" onclick="startProposalFlow()">Start Quote</button>
