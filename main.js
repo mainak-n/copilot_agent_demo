@@ -66,7 +66,7 @@ async function handleUserMessage() {
     // 4. NORMAL FLOW
     const lower = text.toLowerCase();
 
-    if (lower.includes("stock") || lower.includes("inventory")) {
+    if (lower.includes("stock") || lower.includes("inventory") || lower.includes("quantity")) {
         triggerInventoryFlow();
     } 
     // NEW: Check for Insights
