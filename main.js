@@ -122,7 +122,7 @@ function renderWelcomeMessage() {
 }
 
 function triggerInventoryFlow() {
-    simulateThinking(() => {
+    simulateAgentThinking(["Connecting to ERP...", "Querying ID: #992-X500...", "Checking Warehouse A..."], () => {
         const stockCount = Math.floor(Math.random() * (10000 - 1000 + 1)) + 1000;
         const html = `
         <div class="msg bot">
@@ -202,7 +202,7 @@ function handleDiscountSelectionUI(id, discount) {
 
 function triggerProposalReview(discount) {
     clientData.discount = discount;
-    simulateThinking(() => {
+    simulateAgentThinking(["Retrieving Client Context...", "Validating Pricing Model...", "Checking Approval Policies..."], () => {
         if (discount > 10) {
             const id = "app-" + Date.now();
             const html = `
@@ -272,7 +272,7 @@ function renderReadyCard() {
 }
 
 function triggerInsights() {
-    simulateThinking(() => {
+    simulateAgentThinking(["Analyzing CRM data...", "Checking Email history...", "Summarizing sentiment..."], () => {
         const html = `
         <div class="msg bot">
             <div class="msg-avatar"><i class="fa-solid fa-sparkles"></i></div>
@@ -454,4 +454,38 @@ function showToast(title, msg) {
     document.getElementById("toastBody").innerText = msg;
     toast.classList.remove("hidden");
     setTimeout(() => toast.classList.add("hidden"), 3000);
+}
+// --- ADVANCED THINKING HELPER ---
+function simulateAgentThinking(thoughts, onComplete) {
+    const id = "thought-" + Date.now();
+    const thoughtDiv = document.createElement("div");
+    thoughtDiv.className = "msg bot";
+    thoughtDiv.innerHTML = `
+        <div class="msg-avatar"><i class="fa-solid fa-sparkles"></i></div>
+        <div class="msg-content">
+            <div class="thought-box" id="${id}">
+                <div class="thought-step"><i class="fa-solid fa-circle-notch spinner" style="color:#5b5fc7"></i> Thinking...</div>
+            </div>
+        </div>`;
+    chat.appendChild(thoughtDiv);
+    chat.scrollTop = chat.scrollHeight;
+
+    let stepIndex = 0;
+    const interval = setInterval(() => {
+        const container = document.getElementById(id);
+        if (!container) { clearInterval(interval); return; }
+
+        if (stepIndex < thoughts.length) {
+            container.innerHTML = thoughts.map((t, i) => {
+                if (i < stepIndex) return `<div class="thought-step"><i class="fa-solid fa-check" style="color:green"></i> ${t}</div>`;
+                if (i === stepIndex) return `<div class="thought-step"><i class="fa-solid fa-circle-notch spinner" style="color:#5b5fc7"></i> ${t}</div>`;
+                return "";
+            }).join("");
+            stepIndex++;
+        } else {
+            clearInterval(interval);
+            thoughtDiv.remove(); // Remove the thinking bubbles when done
+            onComplete();
+        }
+    }, 800); // Speed of each step (800ms)
 }
