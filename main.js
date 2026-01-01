@@ -79,6 +79,9 @@ async function handleUserMessage() {
     else if (lower.includes("draft") || lower.includes("proposal") || lower.includes("quote") || lower === "ok" || lower === "yes") {
         startProposalFlow();
     } 
+    else if (lower.includes("architecture") || lower.includes("diagram") || lower.includes("design")) {
+        showArchitectureImage();
+    }
     else {
         await generateGeminiResponse(text);
     }
@@ -114,6 +117,7 @@ function renderWelcomeMessage() {
             <div class="suggestion-chips">
                 <button onclick="useSuggestion('Check stock for X500')">📦 Check inventory</button>
                 <button onclick="useSuggestion('Give me insights')">🔍 Get Insights</button>
+                <button onclick="useSuggestion('Show Architecture')">⚙️ Architecture</button>
                 <button onclick="useSuggestion('Draft proposal')">📄 Draft Proposal</button>
             </div>
         </div>`;
@@ -489,4 +493,19 @@ function simulateAgentThinking(thoughts, onComplete) {
             onComplete();
         }
     }, 800); // Speed of each step (800ms)
+}
+function showArchitectureImage() {
+    const div = document.createElement("div");
+    div.className = "msg bot";
+    div.innerHTML = `
+        <div class="msg-avatar"><i class="fa-solid fa-sparkles"></i></div>
+        <div class="msg-content">
+            <div style="font-weight:bold; margin-bottom:10px;">System Architecture:</div>
+            <img src="/architecture.png" alt="Architecture Diagram" 
+                 style="max-width: 100%; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 10px; cursor: pointer;"
+                 onclick="window.open(this.src, '_blank')">
+            <p>I can help with Sales. Try: 'Check stock', 'Get Insights', or 'Draft proposal'.</p>
+        </div>`;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
 }
