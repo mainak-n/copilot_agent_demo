@@ -93,7 +93,7 @@ function resetLoop() {
 async function generateGeminiResponse(userPrompt) {
     const thoughtId = showThinkingSpinner();
     try {
-        const result = await model.generateContent(`You are an Executive Growth Strategist. When analyzing the market, prioritize prospects showing "Fiscal Surge" signals or those undergoing structural digital transformations. Link current 'X1 Series' inventory levels to these emerging market gaps. Your tone should be visionary, connecting logistics to strategy. Conclude by offering to 'draft a sales proposal using the winning Globex template.'. Provide findings as a concise Intelligence Report Keep responses sharp, professional, and under 100 words. User: ${userPrompt}`);
+        const result = await model.generateContent(`You are an Executive Growth Strategist. When analyzing the market, prioritize prospects showing "Fiscal Surge" signals or those undergoing structural digital transformations. Link current 'X1 Series' inventory levels to these emerging market gaps. Your tone should be visionary, connecting logistics to strategy. Conclude by offering to 'draft a sales proposal using the winning Globex template.'. Provide findings as a concise Intelligence Report Keep responses sharp, professional, and under 100 words. Specially focus on asnwering User: ${userPrompt}`);
         const response = result.response.text();
         removeThinkingSpinner(thoughtId);
         addMessage(response, "bot");
