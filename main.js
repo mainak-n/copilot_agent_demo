@@ -53,14 +53,14 @@ async function handleUserMessage() {
     if (isLoopFinished) {
         resetLoop();
         setTimeout(() => renderWelcomeMessage(), 600);
-        return; // STOP HERE (Force loop restart)
+        return; // STOP HERE
     }
 
     // 3. FIRST MESSAGE CHECK
     if (isFirstMessage) {
         isFirstMessage = false;
         setTimeout(() => renderWelcomeMessage(), 600);
-        return; // STOP HERE (Force welcome card first)
+        return; // STOP HERE
     }
 
     // 4. NORMAL FLOW
@@ -69,6 +69,10 @@ async function handleUserMessage() {
     if (lower.includes("stock") || lower.includes("inventory")) {
         triggerInventoryFlow();
     } 
+    // NEW: Check for Insights
+    else if (lower.includes("insight") || lower.includes("potential") || lower.includes("lead"))  {
+        triggerInsights();
+    }
     else if (lower.includes("draft") || lower.includes("proposal") || lower.includes("quote")) {
         startProposalFlow();
     } 
@@ -111,6 +115,7 @@ function renderWelcomeMessage() {
             Hi! I'm Sales Copilot.<br><br>
             <div class="suggestion-chips">
                 <button onclick="useSuggestion('Check stock for X500')">📦 Check inventory</button>
+                <button onclick="useSuggestion('Give me insights')">🔍 Get Insights</button>
                 <button onclick="useSuggestion('Draft proposal')">📄 Draft Proposal</button>
             </div>
         </div>`;
@@ -268,6 +273,30 @@ function renderReadyCard() {
     chat.scrollTop = chat.scrollHeight;
 }
 
+function triggerInsights() {
+    simulateThinking(() => {
+        const html = `
+        <div class="msg bot">
+            <div class="msg-avatar"><i class="fa-solid fa-sparkles"></i></div>
+            <div class="adaptive-card">
+                <div class="card-title">💡 Client Insights: John Doe</div>
+                <div style="font-size:13px; line-height:1.5;">
+                    <ul style="margin:0; padding-left:20px;">
+                        <li><strong>Deal Interest:</strong> <span style="color:green">Very High</span> 🔥</li>
+                        <li><strong>Last Interaction:</strong> Spoke yesterday regarding X500 specs.</li>
+                        <li><strong>Key Blocker:</strong> Concerns about budget approval cycles.</li>
+                    </ul>
+                </div>
+                <hr style="border:0; border-top:1px solid #eee; margin:10px 0;">
+                <button class="btn-primary" onclick="startProposalFlow()">
+                    Start Quote for Customer
+                </button>
+            </div>
+        </div>`;
+        chat.insertAdjacentHTML('beforeend', html);
+        chat.scrollTop = chat.scrollHeight;
+    });
+}
 // --- MODAL LOGIC ---
 function openWordModal() {
     document.getElementById("appModal").classList.remove("hidden");
