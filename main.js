@@ -223,9 +223,13 @@ function triggerProposalReview(discount) {
 }
 
 function handleApprovalClick(id) {
+    // 1. Immediately disable the button to show "Request Sent"
     document.getElementById(id + "-actions").innerHTML = `<button class="btn-primary" disabled style="background:#ccc;">Request Sent...</button>`;
     
-    setTimeout(() => {
+    // 2. Start the Thinking Simulation steps
+    simulateAgentThinking(["Notifying Manager (Sarah Jones)...", "Waiting for response...", "Authorization Token Received"], () => {
+        
+        // 3. CODE TO RUN AFTER THINKING IS DONE (Previously inside setTimeout)
         showToast("Sarah Jones", "Approved! ✅");
         
         document.getElementById(id + "-actions").innerHTML = `<div style="color:green; font-size:12px; margin-bottom:5px;"><strong>Approved</strong></div><button class="btn-primary" onclick="openWordModal()">Open in Word</button>`;
@@ -236,15 +240,13 @@ function handleApprovalClick(id) {
         const sarahTime = document.getElementById("sarahTime");
 
         if (sarahItem && sarahPreview) {
-            // 1. Visual Updates
+            // Visual Updates
             sarahPreview.innerHTML = `<strong>✅ Approved:</strong> ${clientData.name}`;
             sarahPreview.style.color = "#107c10"; // Green text
             sarahTime.innerText = "Now";
             sarahItem.classList.add("chat-item-new"); // Add green border/bg flash
 
-            // 2. Move to Top of "Recent" (Index 4 is usually the first item after "Recent" header)
-            // Parent is chat-list-pane. 
-            // Children: 0=Header, 1=Pinned Label, 2=Copilot, 3=Recent Label, 4=Sarah
+            // Move to Top of "Recent"
             const parent = sarahItem.parentNode;
             const recentHeader = parent.children[3]; 
             // Insert Sarah immediately after the "Recent" header
@@ -254,8 +256,7 @@ function handleApprovalClick(id) {
                 parent.appendChild(sarahItem);
             }
         }
-
-    }, 2000);
+    });
 }
 
 function renderReadyCard() {
