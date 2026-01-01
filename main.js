@@ -501,7 +501,7 @@ function showArchitectureImage() {
         <div class="msg-avatar"><i class="fa-solid fa-sparkles"></i></div>
         <div class="msg-content">
             <div style="font-weight:bold; margin-bottom:10px;">System Architecture:</div>
-            <img src="/architecture.png" alt="Architecture Diagram" 
+            <img src="architecture.png" alt="Architecture Diagram" 
                  style="max-width: 100%; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 10px; cursor: pointer;"
                  onclick="window.open(this.src, '_blank')">
             <p>I can help with Sales. Try: 'Check stock', 'Get Insights', or 'Draft proposal'.</p>
