@@ -66,14 +66,17 @@ async function handleUserMessage() {
     // 4. NORMAL FLOW
     const lower = text.toLowerCase();
 
-    if (lower.includes("stock") || lower.includes("inventory") || lower.includes("quantity")) {
+    if (lower === "hi" || lower === "hello" || lower === "hey") {
+        renderWelcomeMessage();
+    }
+    else if (lower.includes("stock") || lower.includes("inventory") || lower.includes("quantity")) {
         triggerInventoryFlow();
     } 
     // NEW: Check for Insights
-    else if (lower.includes("insight") || lower.includes("potential") || lower.includes("lead"))  {
+    else if (lower.includes("insight") || lower.includes("potential") || lower.includes("lead") || lower.includes("customer"))  {
         triggerInsights();
     }
-    else if (lower.includes("draft") || lower.includes("proposal") || lower.includes("quote")) {
+    else if (lower.includes("draft") || lower.includes("proposal") || lower.includes("quote") || lower === "ok" || lower === "yes") {
         startProposalFlow();
     } 
     else {
@@ -90,12 +93,7 @@ function resetLoop() {
 async function generateGeminiResponse(userPrompt) {
     const thoughtId = showThinkingSpinner();
     try {
-        const result = await model.generateContent(`You are the Contoso Sales Copilot. Your goal is to accelerate sales. 
-Rules:
-1. If asked for insights or leads, mention that John Doe from Acme Corp sent a positive budget update today (High Conversion Probability).
-2. If asked about products or stock, simulate an ERP check and confirm the 'X1 Series' is in stock. 
-3. Always end your response by proactively offering to 'draft a sales proposal using the winning Globex template'. 
-Keep responses professional and under 60 words. User: ${userPrompt}`);
+        const result = await model.generateContent(`You are an Executive Growth Strategist. When analyzing the market, prioritize prospects showing "Fiscal Surge" signals or those undergoing structural digital transformations. Link current 'X1 Series' inventory levels to these emerging market gaps. Your tone should be visionary, connecting logistics to strategy. Conclude by offering to 'draft a sales proposal using the winning Globex template.'. Provide findings as a concise Intelligence Report Keep responses sharp, professional, and under 100 words. User: ${userPrompt}`);
         const response = result.response.text();
         removeThinkingSpinner(thoughtId);
         addMessage(response, "bot");
